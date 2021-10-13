@@ -12,6 +12,8 @@ namespace PlatformerGU.Controllers
             _gun = gunView;
         }
 
+        public Transform AimTransform => _gun.AimTransform;
+
         public void Update()
         {
             var dir = _gun.AimTransform.position - _gun.MuzzleTransform.position;

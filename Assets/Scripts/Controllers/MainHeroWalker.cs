@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace PlatformerGU.Controllers
 {
-    public class MainHeroWalker
+    public sealed class MainHeroWalker
     {
         private const string INPUT_VERTICAL = "Vertical";
         private const string INPUT_HORIZONTAL = "Horizontal";
@@ -56,11 +56,11 @@ namespace PlatformerGU.Controllers
                 if (goSideWay) GoSideWay();
                 if (Mathf.Abs(_yVelocity) > _flyThresh)
                 {
-                    _characterView.PlayJumpAnimation();
+                    //_characterView.PlayJumpAnimation();
                 }
                 else
                 {
-                    _characterView.StopJumpAnimation();
+                    //_characterView.StopJumpAnimation();
                 }
                 _yVelocity += _g * Time.deltaTime;
                 _characterView.transform.position += Vector3.up * (Time.deltaTime * _yVelocity);
