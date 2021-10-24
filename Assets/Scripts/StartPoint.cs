@@ -1,4 +1,6 @@
-﻿using PlatformerGU.Controllers;
+﻿using Pathfinding;
+using PlatformerGU.Controllers;
+using PlatformerGU.Models;
 using PlatformerGU.Views;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,12 +19,22 @@ namespace PlatformerGU
         [SerializeField] private LevelObjectView _deathZone;
         [SerializeField] private Transform _startPosition;
 
+        [Header("Protector AI")]
+        [SerializeField] private EnemyTrigger _enemyTrigger;
+        [SerializeField] private AIConfig _config;
+        [SerializeField] private AIDestinationSetter _protectorAIDestinationSetter;
+        [SerializeField] private AIPatrolPath _protectorAIPatrolPath;
+        [SerializeField] private Transform[] _protectorWaypoints;
+
         private ParalaxManager _paralaxManager;
         private GunController _gunController;
         private BulletsEmitter _bulletsEmitter;
         private MainHeroWalkerPhysics _mainHeroWalkerPhysics;
         private List<CoinsManager> _coinsManager;
         private LevelCompleteManager _levelCompleteManager;
+
+        private ProtectorAI _protectorAI;
+        private ProtectedZone _protectedZone;
 
         private void Start()
         {
@@ -37,6 +49,13 @@ namespace PlatformerGU
             {
                 _coinsManager.Add(new CoinsManager(levelObjectView));
             }
+
+            _protectorAI = new ProtectorAI(_characterView, new PatrolAIModel(_protectorWaypoints), _protectorAIDestinationSetter, _protectorAIPatrolPath);
+            _protectorAI.Init();
+
+            _protectedZone = new ProtectedZone(_enemyTrigger, new List<IProtector> { _protectorAI });
+            _protectedZone.Init();
+
         }
 
         private void Update()
@@ -53,7 +72,12 @@ namespace PlatformerGU
 
         private void OnDestroy()
         {
-            
+            _levelCompleteManager?.Dispose();
+
+            foreach (CoinsManager coin in _coinsManager)
+            {
+                coin.Dispose();
+            }
         }
     }
 }
