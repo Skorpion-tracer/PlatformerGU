@@ -1,5 +1,6 @@
 ﻿using Pathfinding;
 using PlatformerGU.Controllers;
+using PlatformerGU.GenerateLevel;
 using PlatformerGU.Models;
 using PlatformerGU.Views;
 using System.Collections.Generic;
@@ -18,6 +19,7 @@ namespace PlatformerGU
         [SerializeField] private List<LevelObjectView> _levelObjectViews;
         [SerializeField] private LevelObjectView _deathZone;
         [SerializeField] private Transform _startPosition;
+        [SerializeField] private GenerateLevelView _generateLevelView;
 
         [Header("Protector AI")]
         [SerializeField] private EnemyTrigger _enemyTrigger;
@@ -35,6 +37,12 @@ namespace PlatformerGU
 
         private ProtectorAI _protectorAI;
         private ProtectedZone _protectedZone;
+
+        private void Awake()
+        {
+            var controller = new GenerateLevelController(_generateLevelView);
+            controller.Awake();
+        }
 
         private void Start()
         {
